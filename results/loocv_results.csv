@@ -1,0 +1,13 @@
+﻿patient_id,label,P_loocv_logistic,pred_label_loocv_logistic,P_loocv_random_forest,pred_label_loocv_random_forest,P_loocv_lightgbm,pred_label_loocv_lightgbm
+mock_P001,0,0.1394,0,0.38,0,0.9998,1
+mock_P002,1,0.2374,0,0.82,1,0.9998,1
+mock_P003,0,0.0025,0,0.14,0,0.0001,0
+mock_P005,1,0.9995,1,0.98,1,0.9998,1
+mock_P006,0,0.1281,0,0.09,0,0.0001,0
+mock_P007,0,0.9005,1,0.04,0,0.0001,0
+mock_P008,0,0.0,0,0.3,0,0.0006,0
+mock_P009,1,1.0,1,1.0,1,0.9998,1
+mock_P010,0,0.6213,1,0.48,0,0.9998,1
+mock_P011,1,0.0,0,0.09,0,0.0002,0
+mock_P013,1,0.9973,1,0.67,1,0.998,1
+mock_P014,0,0.9715,1,0.24,0,0.0001,0

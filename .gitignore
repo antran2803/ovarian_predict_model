@@ -1,0 +1,136 @@
+# =============================================================================
+# Python & Virtual Environments
+# =============================================================================
+.venv/
+venv/
+env/
+ENV/
+venv.bak/
+*.env/
+ENV*/
+
+# =============================================================================
+# Python Bytecode, Compilations & Caches
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+
+# Packaging & Distribution
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+*.whl
+
+# Testing, Linting & Type Checking
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# =============================================================================
+# Machine Learning, Deep Learning & OCR
+# =============================================================================
+# Model checkpoints & large binary weights
+checkpoints/
+runs/
+artifacts/
+outputs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.engine
+*.h5
+*.tflite
+*.pb
+*.pkl
+*.joblib
+
+# OCR & AI Framework caches (PaddleOCR, HuggingFace, Torch, etc.)
+.paddleocr/
+.cache/
+ppocr_img/
+inference/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# =============================================================================
+# Confidential / Medical / Patient Raw Data
+# =============================================================================
+# Chứa ảnh chụp phiếu khám, dữ liệu bệnh nhân thực tế
+sample_data/
+raw_data/
+data/raw/
+data/images/
+data/scans/
+
+# Medical imaging formats (DICOM, etc.)
+*.dcm
+*.dicom
+
+# Private research documents
+docs/research/
+
+# =============================================================================
+# Environment Variables, Secrets & Credentials
+# =============================================================================
+.env
+.env.*
+*.local
+*.key
+*.pem
+*.secret
+!.env.example
+
+# =============================================================================
+# Logs, Databases & Temporary Files
+# =============================================================================
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+tmp/
+temp/
+scratch/
+
+# =============================================================================
+# IDE & Operating System Files
+# =============================================================================
+# IDEs
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+

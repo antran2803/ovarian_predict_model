@@ -1,38 +1,38 @@
 ﻿patient_id,modality,feature_name,extracted_value,raw_evidence_text,status
 case_01,tabular,age,18,Năm sinh 2008 -> Tuổi 18,EXTRACTED
 case_01,tabular,menopause,0,Độc thân / Học sinh -> Tiền mãn kinh (0),EXTRACTED
-case_01,tabular,pregnancy_status,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,tabular,bilateral_lesion,0,Không tìm thấy trong phiếu (None),EXTRACTED
+case_01,tabular,pregnancy_status,0,Độc thân / Học sinh -> Không mang thai (0),EXTRACTED
+case_01,tabular,bilateral_lesion,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,tabular,months_detection_to_surgery,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,tabular,prior_ovarian_surgery,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,tabular,other_cancer_history,0,Không tìm thấy trong phiếu (None),EXTRACTED
+case_01,tabular,prior_ovarian_surgery,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,tabular,other_cancer_history,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,tabular,other_cancer_primary_site,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,tabular,oncology_center_flag,1,Không tìm thấy trong phiếu (None),EXTRACTED
+case_01,tabular,oncology_center_flag,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,tabular,CA125,772.4,CA.125 -> [772.4] (giá trị: 772.4),EXTRACTED
 case_01,tabular,HE4,39.7,HE4 -> [39.7] (giá trị: 39.7),EXTRACTED
-case_01,tabular,AFP,2000.0,"""AFP -> [2000.00] (giá trị: 2000.0)",EXTRACTED
+case_01,tabular,AFP,2000.0,"""AFP -> [>2000.00] (giá trị: 2000.0)",EXTRACTED
 case_01,tabular,beta_hCG,5.0,Beta hCG -> [Am tinh] (âm tính -> 5.0 mIU/mL),EXTRACTED
 case_01,tabular,ROMA,5.61,ROMA VALUE -> [5.61] (giá trị: 5.61),EXTRACTED
-case_01,ultrasound,lesion_max_diameter_mm,82.0,"Phát hiện kích thước: [('34', '82', '49')] -> Max: 82.0 mm",EXTRACTED
+case_01,ultrasound,lesion_max_diameter_mm,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,ultrasound,solid_max_diameter_mm,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,ultrasound,papillary_count,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,ultrasound,more_than_10_locules,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,ultrasound,acoustic_shadow,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,ultrasound,ascites,1,Phát hiện dịch: DICH CUNG DOcO,EXTRACTED
+case_01,ultrasound,papillary_count,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,ultrasound,more_than_10_locules,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,ultrasound,acoustic_shadow,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,ultrasound,ascites,1,Phát hiện dịch ổ bụng/cùng đồ: '2Hchau c6dichP36mm-T57mm-21g14',EXTRACTED
 case_01,ultrasound,doppler_score,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,ultrasound,morphology_class,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,ultrasound,morphology_class,5,Hình thái tổn thương dạng u đặc (Class 5): 'KHOI ECHOHON HOPVUNGHAVI THEODOI UDAC BUONG TRUNG (PCHUA LOAI TRUS: U QUAI',EXTRACTED
 case_01,ultrasound,laterality,right,Tổn thương buồng trứng phải (P),EXTRACTED
-case_01,ultrasound,solid_component_present,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,ultrasound,multilocular,0,Không tìm thấy trong phiếu (None),EXTRACTED
+case_01,ultrasound,solid_component_present,1,Phát hiện thành phần đặc: 'KHOI ECHOHON HOPVUNGHAVI THEODOI UDAC BUONG TRUNG (PCHUA LOAI TRUS: U QUAI',EXTRACTED
+case_01,ultrasound,multilocular,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,ultrasound,irregular_wall_or_septa,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,ultrasound,vascularity_description,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,ultrasound,iota_adnex_available,0,Không tìm thấy trong phiếu (None),EXTRACTED
-case_01,mri,solid_component,1,Tổn thương có thành phần mô đặc / ngấm thuốc,EXTRACTED
+case_01,ultrasound,iota_adnex_available,None,Không tìm thấy trong phiếu (None),MISSING_NULL
+case_01,mri,solid_component,1,Tổn thương có thành phần mô đặc / ngấm thuốc trên MRI,EXTRACTED
 case_01,mri,solid_max_diameter_mm,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,mri,TIC,1,Đường cong ngấm thuốc Type 2 (mapped=1),EXTRACTED
 case_01,mri,restricted_diffusion,None,Không tìm thấy trong phiếu (None),MISSING_NULL
 case_01,mri,thick_septa,None,Không tìm thấy trong phiếu (None),MISSING_NULL
-case_01,mri,ascites_mri,1,Dịch tự do ổ bụng: Tran dich mang phoi phai luong trung binh be day # 27mm.Xep phoi thu dong day phoi phai,EXTRACTED
-case_01,mri,morphology_class_mri,5,Không tìm thấy trong phiếu (None),EXTRACTED
+case_01,mri,ascites_mri,1,Dịch tự do ổ bụng trên MRI: 'Dich tu do bung luong trung binh',EXTRACTED
+case_01,mri,morphology_class_mri,5,Hình thái tổn thương u đặc (Class 5 theo O-RADS MRI),EXTRACTED
 case_01,mri,o_rads_mri,3,Phát hiện O-RADS MRI 4 (mapped=3),EXTRACTED
 case_01,ground_truth,cancer_label,1,Phát hiện chẩn đoán ác tính (Yolk Sac / Carcinoma / Ác tính),VERIFIED

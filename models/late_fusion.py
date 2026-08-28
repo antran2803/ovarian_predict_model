@@ -27,7 +27,7 @@ class LateFusion:
         # result = {"P_fusion": 0.89, "experts_used": ["mri", "tabular"], "strategy": "simple_average"}
     """
 
-    VALID_STRATEGIES = ("simple_average",)
+    VALID_STRATEGIES = ("simple_average", "and", "or", "max")
 
     def fuse(
         self,
@@ -64,7 +64,7 @@ class LateFusion:
         available = {
             name: prob
             for name, prob in expert_probas.items()
-            if prob is not None
+            if prob is not None and not self._is_nan(prob)
         }
 
         # Không có Expert nào khả dụng → không dự đoán được
@@ -79,10 +79,22 @@ class LateFusion:
 
         if strategy == "simple_average":
             p_fusion = sum(available[e] for e in experts_used) / len(experts_used)
-        # (reserved) elif strategy == "weighted_average": ...
+        elif strategy == "and":
+            p_fusion = float(all(prob >= 0.5 for prob in available.values()))
+        elif strategy == "or":
+            p_fusion = float(any(prob >= 0.5 for prob in available.values()))
+        elif strategy == "max":
+            p_fusion = max(available.values())
 
         return {
             "P_fusion": round(p_fusion, 4),
             "experts_used": experts_used,
             "strategy": strategy,
         }
+
+    @staticmethod
+    def _is_nan(value) -> bool:
+        try:
+            return value != value
+        except (TypeError, ValueError):
+            return False

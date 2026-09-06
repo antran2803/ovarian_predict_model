@@ -9,6 +9,7 @@ NGUYÊN TẮC QUAN TRỌNG:
    BẮT BUỘC parse thành None (không lấy giá trị tạm thời), đồng thời ghi lại vào pending_fields.
 3. Xử lý Missing: Giá trị 'None', 'null', 'MISSING_NULL', 'CHUA RO / CAN BAC SI XAC NHAN' -> parse thành None.
 4. Ép kiểu chuẩn: int, float, str hoặc None.
+5. Giá trị và trạng thái pending được lưu theo (modality, field), không gộp US/MRI.
 """
 
 import os
@@ -41,6 +42,20 @@ STRING_FIELDS = {
 def _clean_str(text: str) -> str:
     """Làm sạch ký tự markdown, khoảng trắng thừa."""
     return text.strip("`* \"'").strip()
+
+
+def _field_key(field_name: str, modality: Optional[str]) -> Tuple[Optional[str], str]:
+    """Resolve schema scope; a shared field requires an explicit modality."""
+    candidates = [name for name, features in MODALITY_FEATURES.items() if field_name in features]
+    if not candidates:
+        return None, field_name  # Ground truth and non-feature report metadata.
+    if modality is not None:
+        if modality not in candidates:
+            raise ValueError(f"Field {field_name} không thuộc modality {modality}")
+        return modality, field_name
+    if len(candidates) > 1:
+        raise ValueError(f"Field {field_name} thiếu modality; không thể phân biệt {candidates}")
+    return candidates[0], field_name
 
 
 def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
@@ -80,18 +95,30 @@ def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
             line_s = line.strip()
             if line_s.startswith("*") or line_s.startswith("-"):
                 # Bắt tên field trong bullet point
-                f_match = re.search(r'[*\-]\s*`?([a-zA-Z0-9_]+)`?\s*:', line_s)
+                f_match = re.search(r'[*\-]\s*`?([a-zA-Z0-9_]+)(?:\s*\(([^)]+)\))?`?\s*:', line_s)
                 if f_match:
                     f_name = f_match.group(1)
                     if "PENDING_CONFIRMATION" in line_s or "chưa rõ" in line_s.lower() or "cần bs" in line_s.lower() or "cần bác sĩ" in line_s.lower():
-                        pending_fields_set.add(f_name)
+                        scope = f_match.group(2)
+                        scope = scope.strip().lower() if scope else None
+                        pending_fields_set.add(_field_key(f_name, scope))
                         pending_notes.append({"field": f_name, "note": line_s})
 
     # 3. Bóc tách từng bảng Markdown
     raw_extracted = {}
+    current_modality = None
 
     for line in content.splitlines():
         line_s = line.strip()
+        if line_s.startswith("#"):
+            # Both report templates name their modality in the table heading.
+            # Reset at every heading so unrelated tables cannot inherit a scope.
+            current_modality = next(
+                (name for name in MODALITY_NAMES
+                 if re.search(rf"\b{re.escape(name)}\b", line_s, re.IGNORECASE)),
+                None,
+            )
+            continue
         if not line_s.startswith("|"):
             continue
         parts = [p.strip() for p in line_s.split("|")]
@@ -105,9 +132,10 @@ def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
             # Bỏ qua header bảng
             if field_name in ["Field", "Tên biến", "Biến (Feature Name)", "Biến trong Schema", "Biến", "Hạng mục", "---", ""]:
                 continue
+            key = _field_key(field_name, current_modality)
             # Kiểm tra nếu field nằm trong danh sách pending hoặc dòng chứa nhãn PENDING_CONFIRMATION / CẦN BÁC SĨ XÁC NHẬN
             is_pending = (
-                field_name in pending_fields_set or
+                key in pending_fields_set or
                 "PENDING_CONFIRMATION" in line_s.upper() or
                 "CAN BAC SI XAC NHAN" in line_s.upper() or
                 "CẦN BÁC SĨ XÁC NHẬN" in line_s.upper() or
@@ -115,9 +143,9 @@ def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
             )
 
             if is_pending:
-                raw_extracted[field_name] = None
-                if field_name not in pending_fields_set:
-                    pending_fields_set.add(field_name)
+                raw_extracted[key] = None
+                if key not in pending_fields_set:
+                    pending_fields_set.add(key)
                     pending_notes.append({"field": field_name, "note": f"Ghi nhận PENDING_CONFIRMATION/CHƯA RÕ cho {field_name}: '{line_s}'"})
                 continue
 
@@ -163,7 +191,7 @@ def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
             else:
                 parsed_val = raw_val
 
-            raw_extracted[field_name] = parsed_val
+            raw_extracted[key] = parsed_val
 
     # 4. Gói dữ liệu theo đúng cấu trúc MODALITY_FEATURES
     modality_values = {}
@@ -171,17 +199,11 @@ def parse_gt_report_to_dict(report_path: str) -> Dict[str, Any]:
     for mod_name in MODALITY_NAMES:
         mod_dict = {}
         for feat in MODALITY_FEATURES[mod_name]:
-            mod_dict[feat] = raw_extracted.get(feat, None)
+            mod_dict[feat] = raw_extracted.get((mod_name, feat), None)
         modality_values[mod_name] = mod_dict
 
     # Lấy ground_truth_label
-    gt_label = raw_extracted.get("cancer_label", None)
-    if gt_label is None:
-        # Thử tìm nhãn từ dòng 'Nhãn `cancer_label`'
-        for k, v in raw_extracted.items():
-            if "cancer_label" in k.lower():
-                gt_label = v
-                break
+    gt_label = raw_extracted.get((None, "cancer_label"), None)
 
     return {
         "patient_id": patient_id,

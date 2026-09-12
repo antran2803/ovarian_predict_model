@@ -79,6 +79,12 @@ raw_data/
 data/raw/
 data/images/
 data/scans/
+data/real/
+
+# Locally generated extraction reports and source documents
+docs/EXTRACTION_REPORT_*.md
+docs/*.pdf
+docs/*.xlsx
 
 # Medical imaging formats (DICOM, etc.)
 *.dcm
@@ -134,3 +140,9 @@ ehthumbs.db
 Thumbs.db
 [Dd]esktop.ini
 
+results/
+
+# Local agent/session notes
+AI_CONTINUATION.md
+
+.agents/

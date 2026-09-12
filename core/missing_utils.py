@@ -11,9 +11,25 @@ def compute_feature_mask(values: dict, modality_name: str) -> list:
     Duyệt theo ĐÚNG THỨ TỰ feature định nghĩa trong config (không theo
     thứ tự key của dict truyền vào) để đảm bảo mask luôn nhất quán
     giữa các bệnh nhân, kể cả khi values thiếu key hoàn toàn.
+
+    XỬ LÝ BIẾN ĐIỀU KIỆN (Conditional Features):
+    - `other_cancer_primary_site` chỉ áp dụng khi `other_cancer_history == 1`.
+      Khi `other_cancer_history == 0`, việc trường này mang giá trị None hoặc 'N/A'
+      là HỢP LỆ theo cấu trúc (không phải dữ liệu bị khuyết thiếu).
+      Do đó, mask của trường này khi other_cancer_history == 0 được tính là 1 (Hợp lệ / Đầy đủ).
     """
     feature_order = MODALITY_FEATURES[modality_name]
-    return [0 if values.get(f) is None else 1 for f in feature_order]
+    mask = []
+    for f in feature_order:
+        val = values.get(f)
+        if f == "other_cancer_primary_site":
+            if values.get("other_cancer_history") == 0:
+                mask.append(1)
+            else:
+                mask.append(0 if val is None else 1)
+        else:
+            mask.append(0 if val is None else 1)
+    return mask
 
 
 def compute_modality_available(feature_mask: list, modality_name: str) -> int:
